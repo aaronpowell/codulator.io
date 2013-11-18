@@ -6,8 +6,10 @@
         'codulatorControllers'
     ]);
 
-    codulatorApp.config(['$routeProvider',
-        function ($routeProvider) {
+    codulatorApp.config(['$routeProvider', '$controllerProvider',
+        function ($routeProvider, $controllerProvider) {
+            codulatorApp.controllerProvider = $controllerProvider;
+
             $routeProvider
                 .when('/', {
                     templateUrl: 'partials/repo-list.html',
@@ -16,7 +18,21 @@
         }
     ]);
 
-    var codulatorControllers = angular.module('codulatorControllers', []);
+    var codulatorControllers = angular.module('codulatorControllers', ['git']);
+
+    var RepositoryListCtrl = codulatorControllers.controller(
+        'RepositoryListCtrl',
+        ['git', function (git) {
+            var onAdd = function () {
+                console.log('add');
+                console.dir(arguments);
+            };
+
+            git.init(onAdd, null, function () {
+                console.log('callback');
+                console.dir(arguments);
+            });
+        }]);
 
     exports.codulatorApp = codulatorApp;
     exports.codulatorControllers = codulatorControllers;
