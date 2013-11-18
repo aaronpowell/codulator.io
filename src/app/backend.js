@@ -1,7 +1,8 @@
 module.exports = function (git) {
+  'use strict';
   var metas = [];
   var dirty;
-  var onAdd, onRemove;
+  var inited = false;
 
   return {
     settings: git.settings,
@@ -35,28 +36,34 @@ module.exports = function (git) {
         return callback(null, meta);
       });
     },
-    init: function (add, remove, callback) {
-      onAdd = add;
-      onRemove = remove;
-      var metas = git.settings.get("metas");
-      if (!metas) return setImmediate(callback);
-      var left = metas.length;
-      if (!metas.length) return setImmediate(callback);
-      var done = false;
-      metas.forEach(function (meta) {
-        addRepo(meta, check);
-      });
-      function check(err) {
-        if (done) return;
-        if (err) {
-          done = true;
-          return callback(err);
-        }
-        if (!--left) {
-          done = true;
-          return callback();
-        }
+    init: function (callback) {
+      metas = git.settings.get("metas") || [];
+      inited = true;
+      setImmediate(callback);
+    },
+    getAll: function (callback) {
+      if (!inited) {
+        return this.init(map);
       }
+
+      return callback(function map() {
+        return metas.map(function (meta, i) {
+          return {
+            index: i,
+            name: meta.name,
+            description: meta.description || meta.name,
+            url: meta.url
+          };
+        });
+      });
+    },
+    get: function (index, callback) {
+      if (!inited) {
+        return this.init(this.get.bind(null, index, callback));
+      }
+
+      var meta = metas[index];
+      addRepo(meta, callback);
     }
   };
 
@@ -72,7 +79,6 @@ module.exports = function (git) {
     repo.description = meta.description || meta.url;
     db.init(function (err) {
       if (err) return callback(err);
-      onAdd(repo, index);
       return callback(null, repo);
     });
   }

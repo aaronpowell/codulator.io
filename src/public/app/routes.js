@@ -14,9 +14,9 @@
                 .when('/', {
                     templateUrl: 'partials/repo-list.html',
                     controller: 'RepositoryListCtrl'
-                }).when('repo/:id', {
+                }).when('/repo/:id', {
                    templateUrl: 'partials/repo-overview.html',
-                   controller: 'RepositoryOverview' 
+                   controller: 'RepositoryOverviewCtrl' 
                 });
         }
     ]);
@@ -25,12 +25,17 @@
 
     codulatorControllers.controller('RepositoryListCtrl',
         ['$scope', 'git', function ($scope, git) {
-            var repos = git.repoList();
-            $scope.repos = repos;
+            git.repoList().then(function (repos) {
+                $scope.repos = repos;
+            });
         }]
-    ).controller('RepositoryOverview', ['$scope', '$routeParams',
-        function ($scope, $routeParams) {
+    ).controller('RepositoryOverviewCtrl', ['$scope', '$routeParams', 'git',
+        function ($scope, $routeParams, git) {
             var id = $routeParams.id;
+
+            git.get(id).then(function (repo) {
+                console.dir(repo);
+            });
         }]
     );
 

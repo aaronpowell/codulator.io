@@ -7,11 +7,24 @@
 
             return {
                 repoList: function () {
-                    var metas = git.settings.get("metas");
-                    if (!metas) {
-                        return [];
-                    }
-                    return metas;
+                    var d = $q.defer();
+                    git.init(function () {
+                        git.getAll(d.resolve);
+                    });
+                    return d.promise;
+                },
+                get: function (index) {
+                    var d = $q.defer();
+
+                    git.get(index, function (err, repo) {
+                        if (err) {
+                            return d.reject(err);
+                        }
+                        
+                        return d.resolve(repo);
+                    });
+
+                    return d.promise;
                 }
             };
         }]);
