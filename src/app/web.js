@@ -16,6 +16,12 @@ function set(key, value) {
   window.localStorage.setItem(key, JSON.stringify(value));
 }
 
+if (!window.setImmediate) {
+  window.setImmediate = function (fn) {
+    setTimeout(fn);
+  };
+}
+
 // Configure the backend
 var backend = require('./backend.js')({
   repo: require('js-git')(platform),

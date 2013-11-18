@@ -1,3 +1,7 @@
 <div>
-    Woot!
+    <section data-ng-repeat="repo in repos">
+        <h1><a href="/{{$index}}">{{repo.name}}</a></h1>
+        <p data-ng-show="{{repo.description}}">{{repo.description}}</p>
+        <p>Repository url - {{repo.url}}</p>
+    </section>
 </div>

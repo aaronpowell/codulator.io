@@ -22,16 +22,10 @@
 
     var RepositoryListCtrl = codulatorControllers.controller(
         'RepositoryListCtrl',
-        ['git', function (git) {
-            var onAdd = function () {
-                console.log('add');
-                console.dir(arguments);
-            };
+        ['$scope', 'git', function ($scope, git) {
+            var repos = git.repoList();
 
-            git.init(onAdd, null, function () {
-                console.log('callback');
-                console.dir(arguments);
-            });
+            $scope.repos = repos;
         }]);
 
     exports.codulatorApp = codulatorApp;
