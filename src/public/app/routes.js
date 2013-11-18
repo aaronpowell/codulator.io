@@ -14,19 +14,25 @@
                 .when('/', {
                     templateUrl: 'partials/repo-list.html',
                     controller: 'RepositoryListCtrl'
+                }).when('repo/:id', {
+                   templateUrl: 'partials/repo-overview.html',
+                   controller: 'RepositoryOverview' 
                 });
         }
     ]);
 
     var codulatorControllers = angular.module('codulatorControllers', ['git']);
 
-    var RepositoryListCtrl = codulatorControllers.controller(
-        'RepositoryListCtrl',
+    codulatorControllers.controller('RepositoryListCtrl',
         ['$scope', 'git', function ($scope, git) {
             var repos = git.repoList();
-
             $scope.repos = repos;
-        }]);
+        }]
+    ).controller('RepositoryOverview', ['$scope', '$routeParams',
+        function ($scope, $routeParams) {
+            var id = $routeParams.id;
+        }]
+    );
 
     exports.codulatorApp = codulatorApp;
     exports.codulatorControllers = codulatorControllers;

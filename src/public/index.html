@@ -2,14 +2,31 @@
 <html data-ng-app="codulatorApp">
     <head>
         <title>Codulator.io</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
+
+        <style>
+            body {
+                margin-top: 40px;
+            }
+
+            .repo-list a {
+                float: right;
+            }
+        </style>
     </head>
     <body>
+        <div class="container" data-ng-view>
+
+        </div>
+
         <script src="dynamic/git.js"></script>
+        <script src="bower_components/jquery/jquery.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/angular-route/angular-route.js"></script>
         <script src="app/routes.js"></script>
         <script src="app/services.js"></script>
-
-        <div data-ng-view></div>
     </body>
 </html>

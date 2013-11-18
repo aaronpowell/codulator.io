@@ -1,7 +1,7 @@
-<div>
-    <section data-ng-repeat="repo in repos">
-        <h1><a href="/{{$index}}">{{repo.name}}</a></h1>
-        <p data-ng-show="{{repo.description}}">{{repo.description}}</p>
-        <p>Repository url - {{repo.url}}</p>
+<div class="list-group repo-list">
+    <section data-ng-repeat="repo in repos" class="list-group-item">
+        <h1 class="list-group-item-heading">{{repo.name}}<a href="#/repo/{{$index}}" class="glyphicon glyphicon-circle-arrow-right"></a></h1>
+        <p data-ng-show="{{repo.description}}" class="list-group-item-text">{{repo.description}}</p>
+        <p class="list-group-item-text">Repository url - {{repo.url}}</p>
     </section>
 </div>
