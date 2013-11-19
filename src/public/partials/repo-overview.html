@@ -6,9 +6,11 @@
     <section data-ng-repeat="log in logs" class="list-group-item">
         <h1><a href="#/repo/{{id}}/{{log.hash}}" class="glyphicon glyphicon-circle-arrow-right"></a></h1>
         <h3>Author: {{log.author.name}} @ {{log.author.date | date:'medium'}}</h3>
-        <p>{{log.message}}</p>
+        <p>{{log.message | limitTo:80 }}</p>
+        <p><strong>{{log.hash | limitTo:6 }}</strong></p>
+        <h4>Parents:</h4>
         <ul class="parent-list">
-            <li data-ng-repeat="parent in log.parents" data-ng-click="hightlightParent()">{{parent.slice(0, 6)}}</li>
+            <li data-ng-repeat="parent in log.parents" data-ng-click="hightlightParent()">{{parent | limitTo:6 }}</li>
         </ul>
     </section>
 </div>
