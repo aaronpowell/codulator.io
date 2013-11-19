@@ -1,3 +1,21 @@
+<script id="tree_node.html" type="text/ng-template">
+    <span class="glyphicon {{blob.type | glyph}}"></span>
+    <a href="" data-ng-click="load(blob)">{{blob.name}}</a>
+</script>
+
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <a href="#/repo/{{id}}" class="navbar-brand">{{name}} - {{hash | limitTo:6 }}</a>
+    <a href="#/repo/{{id}}" class="navbar-brand">{{name}} - {{ hash | limitTo:6 }}</a>
 </nav>
+<div>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <ul class="tree">
+            <li data-ng-repeat="blob in tree" data-ng-include="'tree_node.html'"></li>
+        </ul>
+    </div>
+    <div class="col-md-8">
+        Code area here
+    </div>
+</div>

@@ -4,7 +4,8 @@
     var codulatorApp = angular.module('codulatorApp', [
         'ngRoute',
         'codulatorControllers',
-        'shared'
+        'shared',
+        'kendo.directives'
     ]);
 
     codulatorApp.config(['$routeProvider', '$controllerProvider',
@@ -68,15 +69,20 @@
             });
         }]
     ).controller('CommitViewCtrl', ['git', '$scope', '$routeParams', function (git, $scope, $routeParams) {
-        var id = $routeParams.id;
         var hash = $routeParams.hash;
 
-        git.get(id).then(function (repo) {
+        $scope.id = $routeParams.id;
+
+        $scope.load = function (blob) {
+            console.dir(blob);
+        };
+
+        git.get($scope.id).then(function (repo) {
             $scope.name = repo.name;
             $scope.hash = hash;
 
             git.getCommitTree(repo, hash).then(function (tree) {
-
+                $scope.tree = tree;
             });
         })
     }]);
