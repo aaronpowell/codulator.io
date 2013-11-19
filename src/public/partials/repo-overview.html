@@ -5,7 +5,10 @@
 <div class="list-group">
     <section data-ng-repeat="log in logs" class="list-group-item">
         <h1><a href="#/repo/{{id}}/{{log.hash}}" class="glyphicon glyphicon-circle-arrow-right"></a></h1>
-        <h3>Author: {{log.author.name}} @ {{log.author.date | date:'medium'}}</h3>
+        <h3>
+            <img src="http://www.gravatar.com/avatar/{{ log.author.email | hash }}">
+            Author: {{log.author.name}} @ {{log.author.date | date:'medium'}}
+        </h3>
         <p>{{log.message | limitTo:80 }}</p>
         <p><strong>{{log.hash | limitTo:6 }}</strong></p>
         <h4>Parents:</h4>

@@ -3,7 +3,8 @@
 
     var codulatorApp = angular.module('codulatorApp', [
         'ngRoute',
-        'codulatorControllers'
+        'codulatorControllers',
+        'shared'
     ]);
 
     codulatorApp.config(['$routeProvider', '$controllerProvider',
