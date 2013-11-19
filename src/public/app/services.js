@@ -28,21 +28,26 @@
 
                     return d.promise;
                 },
-                getLog: function (repo, limit) {
+                getLog: function (repo, limit, startHash) {
                     var d = $q.defer();
                     var logs = [];
+                    var depth = 0;
 
-                    repo.logWalk('HEAD', function (err, stream) {
+                    repo.logWalk(startHash || 'HEAD', function (err, stream) {
                         stream.read(function walker(err, log) {
                             if (err) {
                                 return d.reject(err);
                             }
-                            if (log) {
+                            if (log && limit && depth < limit) {
                                 logs.push(log);
+                                depth++;
                                 return stream.read(walker);
                             }
 
-                            d.resolve(logs);
+                            d.resolve({
+                                logs: logs,
+                                mightHaveMore: !!log
+                            });
                         });
                     });
                     return d.promise;

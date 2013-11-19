@@ -32,6 +32,7 @@
     ).controller('RepositoryOverviewCtrl', ['$scope', '$routeParams', 'git',
         function ($scope, $routeParams, git) {
             var id = $routeParams.id;
+            var currRepo;
 
             $scope.id = id;
 
@@ -42,10 +43,21 @@
                 });
             };
 
+            $scope.loadMore = function () {
+                git.getLog(currRepo, 10, $scope.logs[$scope.logs.length - 1].hash).then(function (result) {
+                    result.logs.slice(1).forEach(function (log) {
+                        $scope.logs.push(log);
+                    });
+                    $scope.hasMore = result.mightHaveMore;
+                });
+            };
+
             git.get(id).then(function (repo) {
+                currRepo = repo;
                 $scope.name = repo.name;
-                git.getLog(repo).then(function (logs) {
-                    $scope.logs = logs;
+                git.getLog(repo, 10).then(function (result) {
+                    $scope.logs = result.logs;
+                    $scope.hasMore = result.mightHaveMore;
                 });
             });
         }]

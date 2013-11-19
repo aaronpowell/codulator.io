@@ -13,4 +13,7 @@
             <li data-ng-repeat="parent in log.parents" data-ng-click="hightlightParent()">{{parent | limitTo:6 }}</li>
         </ul>
     </section>
+    <section data-ng-show="hasMore" data-ng-click="loadMore()" class="list-group-item load-more">
+        <h2>Load more</h2>
+    </section>
 </div>
