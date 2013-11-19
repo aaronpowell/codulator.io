@@ -1,6 +1,21 @@
 (function (angular) {
     'use strict';
 
+    // Patterns for different language mode names.
+    var modes = {
+      javascript: /\.(?:js|json|webapp)$/i,
+      css: /\.(?:css|less)$/i,
+      // markup: /\.(?:xml|html|svg)$/i,
+      bash: /\.sh$/i,
+      c: /\.(?:h|c)$/i,
+      cpp: /\.(?:cpp|cxx|hxx|h)$/i,
+      coffeescript: /\.(?:cs|coffee)$/i,
+    };
+
+    var isText = /(?:\.(?:markdown|md|txt|html|svg|xml|yml)|^(?:LICENSE|README|\.gitignore))$/i;
+
+    var isImage = /\.(?:png|jpg|jpeg|gif)$/i;
+
     angular.module('git', [])
         .factory('git', ['$window', '$q', function ($window, $q) {
             var git = $window.git;
@@ -50,6 +65,41 @@
                             });
                         });
                     });
+                    return d.promise;
+                },
+                getCommitTree: function (repo, commitHash) {
+                    var d = $q.defer();
+                    var that = this;
+
+                    repo.loadAs('commit', commitHash, function (err, commit) {
+                        that.getTree(repo, commit.tree).then(d.resolve);
+                    });
+
+                    return d.promise;
+                },
+                getTree: function (repo, treeHash) {
+                    var d = $q.defer();
+
+                    repo.loadAs('tree', treeHash, function (err, blobs) {
+                        blobs = blobs.map(function (blob) {
+                            blob.type = 'folder';
+                            if (isImage.test(blob.name)) {
+                                blob.type = 'image';
+                            } else if (isText.test(blob.name)) {
+                                blob.type = 'text';
+                            } else {
+                                Object.keys(modes).forEach(function (key) {
+                                    if (modes[key].test(blob.name)) {
+                                        blob.type = key;
+                                    }
+                                });
+                            }
+                            return blob;
+                        });
+
+                        d.resolve(blobs);
+                    });
+
                     return d.promise;
                 }
             };

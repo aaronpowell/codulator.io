@@ -74,6 +74,10 @@
         git.get(id).then(function (repo) {
             $scope.name = repo.name;
             $scope.hash = hash;
+
+            git.getCommitTree(repo, hash).then(function (tree) {
+
+            });
         })
     }]);
 })(window.angular, window);
