@@ -35,6 +35,9 @@
 
             git.get(id).then(function (repo) {
                 console.dir(repo);
+                git.getLog(repo).then(function (logs) {
+                    console.dir(logs);
+                });
             });
         }]
     );
