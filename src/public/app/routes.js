@@ -41,7 +41,4 @@
             });
         }]
     );
-
-    exports.codulatorApp = codulatorApp;
-    exports.codulatorControllers = codulatorControllers;
 })(window.angular, window);
