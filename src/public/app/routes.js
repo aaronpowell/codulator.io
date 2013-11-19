@@ -68,6 +68,12 @@
             });
         }]
     ).controller('CommitViewCtrl', ['git', '$scope', '$routeParams', function (git, $scope, $routeParams) {
-        console.dir($routeParams);
+        var id = $routeParams.id;
+        var hash = $routeParams.hash;
+
+        git.get(id).then(function (repo) {
+            $scope.name = repo.name;
+            $scope.hash = hash;
+        })
     }]);
 })(window.angular, window);
