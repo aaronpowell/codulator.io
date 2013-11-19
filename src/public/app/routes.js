@@ -18,6 +18,11 @@
                 }).when('/repo/:id', {
                    templateUrl: 'partials/repo-overview.html',
                    controller: 'RepositoryOverviewCtrl' 
+                }).when('/repo/:id/:hash', {
+                    templateUrl: 'partials/commit-viewer.html',
+                    controller: 'CommitViewCtrl'
+                }).otherwise({
+                    redirectTo: '/'
                 });
         }
     ]);
@@ -62,5 +67,7 @@
                 });
             });
         }]
-    );
+    ).controller('CommitViewCtrl', ['git', '$scope', '$routeParams', function (git, $scope, $routeParams) {
+        console.dir($routeParams);
+    }]);
 })(window.angular, window);
