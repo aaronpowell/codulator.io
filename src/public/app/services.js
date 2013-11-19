@@ -9,7 +9,9 @@
                 repoList: function () {
                     var d = $q.defer();
                     git.init(function () {
-                        git.getAll(d.resolve);
+                        git.getAll(function (repos) {
+                            d.resolve(repos);
+                        });
                     });
                     return d.promise;
                 },

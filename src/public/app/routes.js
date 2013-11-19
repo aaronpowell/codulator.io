@@ -33,10 +33,12 @@
         function ($scope, $routeParams, git) {
             var id = $routeParams.id;
 
+            $scope.id = id;
+
             git.get(id).then(function (repo) {
-                console.dir(repo);
+                $scope.name = repo.name;
                 git.getLog(repo).then(function (logs) {
-                    console.dir(logs);
+                    $scope.logs = logs
                 });
             });
         }]

@@ -1,3 +1,11 @@
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <a href="#/repo/{{id}}" class="navbar-brand">{{name}}</a>
+</nav>
 <div>
-    woot
+<div class="list-group">
+    <section data-ng-repeat="log in logs" class="list-group-item">
+        <h1><a href="#/repo/{{id}}/{{log.hash}}" class="glyphicon glyphicon-circle-arrow-right"></a></h1>
+        <h3>Author: {{log.author.name}} @ {{log.author.date | date:'medium'}}</h3>
+        <p>{{log.message}}</p>
+    </section>
 </div>

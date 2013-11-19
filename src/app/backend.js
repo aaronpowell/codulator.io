@@ -46,7 +46,7 @@ module.exports = function (git) {
         return this.init(map);
       }
 
-      return callback(function map() {
+      return callback((function map() {
         return metas.map(function (meta, i) {
           return {
             index: i,
@@ -55,7 +55,7 @@ module.exports = function (git) {
             url: meta.url
           };
         });
-      });
+      })());
     },
     get: function (index, callback) {
       if (!inited) {
