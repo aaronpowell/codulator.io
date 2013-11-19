@@ -4,8 +4,7 @@
     var codulatorApp = angular.module('codulatorApp', [
         'ngRoute',
         'codulatorControllers',
-        'shared',
-        'kendo.directives'
+        'shared'
     ]);
 
     codulatorApp.config(['$routeProvider', '$controllerProvider',
