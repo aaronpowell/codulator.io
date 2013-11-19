@@ -35,10 +35,17 @@
 
             $scope.id = id;
 
+            $scope.hightlightParent = function () {
+                var hash = this.parent;
+                $scope.logs.forEach(function (log) {
+                    log.focus = log.hash === hash;
+                });
+            };
+
             git.get(id).then(function (repo) {
                 $scope.name = repo.name;
                 git.getLog(repo).then(function (logs) {
-                    $scope.logs = logs
+                    $scope.logs = logs;
                 });
             });
         }]
