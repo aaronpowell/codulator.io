@@ -101,6 +101,25 @@
                     });
 
                     return d.promise;
+                },
+                getBlob: function (repo, blobHash) {
+                    var d = $q.defer();
+
+                    repo.loadAs('blob', blobHash, function (err, blob) {
+                        if (err) {
+                            d.reject(err);
+                            return;
+                        }
+
+                        var code = "";
+                        for (var i = 0, l = blob.length; i < l; ++i) {
+                            code += String.fromCharCode(blob[i]);
+                        }
+
+                        d.resolve(code);
+                    });
+
+                    return d.promise;
                 }
             };
         }]);

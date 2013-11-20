@@ -69,16 +69,31 @@
         }]
     ).controller('CommitViewCtrl', ['git', '$scope', '$routeParams', function (git, $scope, $routeParams) {
         var hash = $routeParams.hash;
+        var currentRepo;
 
         $scope.id = $routeParams.id;
 
         $scope.load = function (blob) {
-            console.dir(blob);
+            if (blob.type === 'folder') {
+                git.getTree(currentRepo, blob.hash).then(function (tree) {
+console.dir(tree);
+                });
+            } else {
+                git.getBlob(currentRepo, blob.hash).then(function (contents) {
+                    $scope.currentBlob = {
+                        name: blob.name,
+                        hash: blob.hash,
+                        contents: contents
+                    };
+                });
+            }
         };
 
         git.get($scope.id).then(function (repo) {
             $scope.name = repo.name;
             $scope.hash = hash;
+
+            currentRepo = repo;
 
             git.getCommitTree(repo, hash).then(function (tree) {
                 $scope.tree = tree;
