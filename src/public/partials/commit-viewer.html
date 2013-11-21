@@ -7,7 +7,16 @@
 </script>
 
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <a href="#/repo/{{id}}" class="navbar-brand">{{name}} - {{ hash | limitTo:6 }}</a>
+    <div class="navbar-header">
+        <a href="#/" class="navbar-brand">Codulator.io</a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+        <ul class="nav navbar-nav">
+            <li><a href="#/repo/{{id}}">{{name}}</a></li>
+            <li><p class="navbar-text">-&gt;</p></li>
+            <li><a href="#/repo/{{id}}/{{hash}}">{{ hash | limitTo:6 }}</a></li>
+        </ul>
+    </div>
 </nav>
 <div>
 

@@ -22,6 +22,9 @@
                 }).when('/repo/:id/:hash', {
                     templateUrl: 'partials/commit-viewer.html',
                     controller: 'CommitViewCtrl'
+                }).when('/add', {
+                    templateUrl: 'partials/add.html',
+                    controller: 'AddRepoCtrl'
                 }).otherwise({
                     redirectTo: '/'
                 });
@@ -105,5 +108,16 @@
                 $scope.tree = tree;
             });
         })
+    }])
+    .controller('AddRepoCtrl', ['git', '$scope', '$location', function (git, $scope, $location) {
+        $scope.url = '';
+        $scope.name = '';
+        $scope.desc = '';
+
+        $scope.save = function () {
+            git.add($scope.name, $scope.url, $scope.desc).then(function (repo) {
+                $location.path('/');
+            });
+        };
     }]);
 })(window.angular, window);

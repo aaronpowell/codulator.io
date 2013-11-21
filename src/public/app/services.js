@@ -121,6 +121,23 @@
                     });
 
                     return d.promise;
+                },
+                add: function (name, url, desc) {
+                    var d = $q.defer();
+
+                    git.add({
+                        name: name,
+                        url: url,
+                        description: desc
+                    }, function (err, repo) {
+                        if (err) {
+                            d.reject(err);
+                            return;
+                        }
+                        d.resolve(repo);
+                    });
+
+                    return d.promise;
                 }
             };
         }]);

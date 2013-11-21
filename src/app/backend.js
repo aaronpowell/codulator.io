@@ -7,6 +7,11 @@ module.exports = function (git) {
   return {
     settings: git.settings,
     add: function (meta, callback) {
+      if (!inited) {
+        this.init(this.add.bind(null, meta, callback));
+        return;
+      }
+
       for (var i = 0, l = metas.length; i < l; ++i) {
         if (metas[i].name === meta.name) {
           return callback(new Error(meta.name + " name already taken."));
