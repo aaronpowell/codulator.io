@@ -49,7 +49,7 @@
                     var logs = [];
                     var depth = 0;
 
-                    repo.logWalk(startHash || 'HEAD', function (err, stream) {
+                    var readLog = function (err, stream) {
                         stream.read(function walker(err, log) {
                             if (err) {
                                 return d.reject(err);
@@ -65,7 +65,28 @@
                                 mightHaveMore: !!log
                             });
                         });
-                    });
+                    };
+
+                    if (!startHash) {
+                        repo.getHead(function (err, head) {
+                            if (err) {
+                                return d.reject(err);
+                            }
+
+                            if (!head) {
+                                repo.fetch(repo.remote, {}, function (err) {
+                                    if (err) {
+                                        return d.reject(err);
+                                    }
+
+                                    repo.logWalk(startHash || 'HEAD', readLog);
+                                })
+                            } else {
+                                repo.logWalk(startHash || 'HEAD', readLog);
+                            }
+                        });
+                    }
+
                     return d.promise;
                 },
                 getCommitTree: function (repo, commitHash) {

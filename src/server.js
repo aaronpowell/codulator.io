@@ -87,7 +87,7 @@ wss.on('connection', function (socket) {
     }
 });
 
-app.listen(process.env.PORT || 8001);
+server.listen(process.env.PORT || 8001);
 
 var targets = process.argv.slice(2);
 if (targets[0] === 'w' || targets[0] === 'watch') {
