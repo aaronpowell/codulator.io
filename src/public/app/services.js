@@ -10,6 +10,7 @@
       c: /\.(?:h|c)$/i,
       cpp: /\.(?:cpp|cxx|hxx|h)$/i,
       coffeescript: /\.(?:cs|coffee)$/i,
+      jade: /\.jade$/i
     };
 
     var isText = /(?:\.(?:markdown|md|txt|html|svg|xml|yml)|^(?:LICENSE|README|\.gitignore))$/i;

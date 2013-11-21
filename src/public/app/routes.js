@@ -4,7 +4,8 @@
     var codulatorApp = angular.module('codulatorApp', [
         'ngRoute',
         'codulatorControllers',
-        'shared'
+        'shared',
+        'ui.codemirror'
     ]);
 
     codulatorApp.config(['$routeProvider', '$controllerProvider',
@@ -73,10 +74,15 @@
 
         $scope.id = $routeParams.id;
 
+        $scope.cmOption = {
+            lineNumbers: true,
+            indentWithTabs: true
+        };
+
         $scope.load = function (blob) {
             if (blob.type === 'folder') {
                 git.getTree(currentRepo, blob.hash).then(function (tree) {
-console.dir(tree);
+                    blob.tree = tree;
                 });
             } else {
                 git.getBlob(currentRepo, blob.hash).then(function (contents) {

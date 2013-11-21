@@ -1,6 +1,9 @@
 <script id="tree_node.html" type="text/ng-template">
     <span class="glyphicon {{blob.type | glyph}}"></span>
     <a href="" data-ng-click="load(blob)">{{blob.name}}</a>
+    <ul class="tree" data-ng-show="blob.tree.length">
+        <li data-ng-repeat="blob in blob.tree" data-ng-include="'tree_node.html'"></li>
+    </ul>
 </script>
 
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -10,12 +13,12 @@
 
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <ul class="tree">
             <li data-ng-repeat="blob in tree" data-ng-include="'tree_node.html'"></li>
         </ul>
     </div>
-    <div class="col-md-8">
-        <textarea>{{currentBlob.contents}}</textarea>
+    <div class="col-md-9">
+        <div data-ui-codemirror="cmOption" data-ng-model="currentBlob.contents"></div>
     </div>
 </div>

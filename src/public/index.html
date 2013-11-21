@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
+        <link rel="stylesheet" href="dynamic/codemirror-3.19/lib/codemirror.css">
 
         <style>
             body {
@@ -51,6 +52,17 @@
                 margin-right: 5px;
                 display: inline-block;
             }
+
+            .tree .tree {
+                padding-left:20px;
+            }
+
+            .CodeMirror {
+                height: 850px;
+                border: 1px solid #000;
+
+                font-size: 20px;
+            }
         </style>
     </head>
     <body>
@@ -67,5 +79,12 @@
         <script src="app/filters.js"></script>
         <script src="app/routes.js"></script>
         <script src="app/services.js"></script>
+
+        <script src="dynamic/codemirror-3.19/lib/codemirror.js"></script>
+        <script src="dynamic/codemirror-3.19/mode/javascript/javascript.js"></script>
+        <script src="dynamic/codemirror-3.19/mode/css/css.js"></script>
+        <script src="dynamic/codemirror-3.19/mode/markdown/markdown.js"></script>
+        <script src="dynamic/codemirror-3.19/mode/jade/jade.js"></script>
+        <script src="dynamic/ui-codemirror.js"></script>
     </body>
 </html>
