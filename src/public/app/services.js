@@ -30,18 +30,35 @@
                     //var entry = findByName(tree, fileName);
 
                     var entry;
+                    var folders = [];
 
                     for (var i = 0; i < tree.length; i++) {
                         if (tree[i].name === fileName) {
                             entry = tree[i];
                             continue;
                         }
+
+                        if (tree[i].type == 'folder') {
+                            folders.push(tree[i]);
+                        }
                     };
 
                     // return undefined for not-found errors
                     if (!entry) {
-                        d.resolve();
-                        return
+                        if (folders.length) {
+                            $q.all(
+                                folders.map(function (folder) {
+                                    return walkPath(folder.hash, fileName, blobHash, repo);
+                                })
+                            ).then(function () {
+                                console.dir(arguments);
+                                d.resolve();
+                            });
+                            return;
+                        } else {
+                            d.resolve();
+                            return;
+                        }
                     }
                     // If there are still segments left, keep reading tree paths
                     //if (names.length) 
