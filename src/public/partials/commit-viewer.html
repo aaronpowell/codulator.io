@@ -20,7 +20,6 @@
 </nav>
 <div>
 
-
 <div class="row">
     <div class="col-md-3">
         <ul class="tree">
@@ -28,6 +27,23 @@
         </ul>
     </div>
     <div class="col-md-9">
-        <div data-ui-codemirror="cmOption" data-ng-model="currentBlob.contents"></div>
+        <div data-ui-codemirror="cmOption" data-ng-model="currentBlob.contents" data-ng-show="currentBlob && !mergeMode"></div>
+        <div data-ui-codemirror-merge="cmMergeOption" data-ng-show="mergeMode"></div>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <span class="navbar-brand">{{currentBlob.name || 'No file selected'}}</span>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                <form name="differ" class="navbar-form navbar-left" role="search" data-ng-submit="diff(currentBlob)">
+                    <div class="form-group">
+                        <select name="diffType" class="form-control" data-ng-disabled="!currentBlob" required data-ng-model="diffType">
+                            <option value="">Diff with</option>
+                            <option value="prev">Previous version</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-default" type="submit" data-ng-disabled="!currentBlob">Diff</button>
+                </form>
+            </div>
+        </nav>
     </div>
 </div>

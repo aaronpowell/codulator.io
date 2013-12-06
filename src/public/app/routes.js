@@ -5,7 +5,8 @@
         'ngRoute',
         'codulatorControllers',
         'shared',
-        'ui.codemirror'
+        'ui.codemirror',
+        'ui.codemirror-merge'
     ]);
 
     codulatorApp.config(['$routeProvider', '$controllerProvider',
@@ -82,20 +83,40 @@
             indentWithTabs: true
         };
 
+        $scope.cmMergeOption = {
+            lineNumbers: true,
+            indentWithTabs: true,
+            highlightDifferences: true
+        };
+
         $scope.load = function (blob) {
             if (blob.type === 'folder') {
                 git.getTree(currentRepo, blob.hash).then(function (tree) {
                     blob.tree = tree;
                 });
             } else {
+                $scope.currentBlob = {
+                    name: blob.name,
+                    hash: blob.hash
+                };
+                $scope.mergeMode = false;
                 git.getBlob(currentRepo, blob.hash).then(function (contents) {
-                    $scope.currentBlob = {
-                        name: blob.name,
-                        hash: blob.hash,
-                        contents: contents
-                    };
+                    $scope.currentBlob.contents = contents;
                 });
             }
+        };
+
+        $scope.diff = function (blob) {
+            var diffType = $scope.diffType;
+            $scope.mergeMode = true;
+            git.findPrev(currentRepo, hash, blob.hash, blob.name).then(function (diff) {
+                var prev = diff.oldBlob;
+
+                $scope.cmMergeOption.value = $scope.currentBlob.contents;
+                $scope.cmMergeOption.orig = prev.contents;
+            }, function (err) {
+                console.error(err);
+            });
         };
 
         git.get($scope.id).then(function (repo) {

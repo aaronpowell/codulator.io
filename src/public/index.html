@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
         <link rel="stylesheet" href="bower_components/codemirror/lib/codemirror.css">
+        <link rel="stylesheet" href="bower_components/codemirror/addon/merge/merge.css">
 
         <style>
             body {
@@ -57,8 +58,8 @@
                 padding-left:20px;
             }
 
-            .CodeMirror {
-                height: 850px;
+            .CodeMirror, .CodeMirror-merge, .CodeMirror-merge .CodeMirror {
+                height: 800px;
                 border: 1px solid #000;
 
                 font-size: 20px;
@@ -85,6 +86,9 @@
         <script src="bower_components/codemirror/mode/css/css.js"></script>
         <script src="bower_components/codemirror/mode/markdown/markdown.js"></script>
         <script src="bower_components/codemirror/mode/jade/jade.js"></script>
+        <script src="bower_components/codemirror/addon/merge/dep/diff_match_patch.js"></script>
+        <script src="bower_components/codemirror/addon/merge/merge.js"></script>
         <script src="bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
+        <script src="app/angular-ui-codemirror-merge.js"></script>
     </body>
 </html>

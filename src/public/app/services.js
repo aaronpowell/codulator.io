@@ -21,7 +21,57 @@
         .factory('git', ['$window', '$q', function ($window, $q) {
             var git = $window.git;
 
-            return {
+            function walkPath(tree, fileName, blobHash, repo) {
+                var d = $q.defer();
+
+                factory.getTree(repo, tree).then(onTree);
+
+                function onTree(tree) {
+                    //var entry = findByName(tree, fileName);
+
+                    var entry;
+
+                    for (var i = 0; i < tree.length; i++) {
+                        if (tree[i].name === fileName) {
+                            entry = tree[i];
+                            continue;
+                        }
+                    };
+
+                    // return undefined for not-found errors
+                    if (!entry) {
+                        d.resolve();
+                        return
+                    }
+                    // If there are still segments left, keep reading tree paths
+                    //if (names.length) 
+                    //    return factory.getTree(entry.hash).then(onTree);
+                    
+                    // Otherwise, load and return the blob
+                    factory.getBlob(repo, entry.hash).then(function (contents) {
+                        d.resolve({
+                            name: fileName,
+                            contents: contents,
+                            hash: entry.hash
+                        });
+                    }, d.reject);
+                }
+
+                return d.promise;
+            }
+
+            function findByName(tree, name) {
+                for (var i = 0, l = tree.length; i < l; i++) {
+                    var entry = tree[i];
+                    if (entry.name === name) return entry;
+                }
+            }
+
+            function cleanPath(name) {
+                return name && name !== ".";
+            }
+
+            var factory = {
                 repoList: function () {
                     var d = $q.defer();
                     git.init(function () {
@@ -159,7 +209,79 @@
                     });
 
                     return d.promise;
+                },
+                findPrev: function (repo, commitHash, blobHash, blobName) {
+                    var d = $q.defer();
+
+                    var log; // The log stream
+                    var currentBlob; // The current value of the blob
+                    var oldBlob; // The last value of the blob
+                    var changeCommit; // The commit that made the last change to the blob
+                    var oldCommit; // The previous commit
+
+                    // First get the log stream
+                    repo.logWalk(commitHash, onLog);
+
+                    function onLog(err, result) {
+                        if (err) {
+                            d.reject(err);
+                            return
+                        }
+                        log = result;
+                        // Read the current commit
+                        log.read(onCurrentCommit);
+                    }
+
+                    function onCurrentCommit(err, result) {
+                        if (err) {
+                            d.reject(err);
+                            return;
+                        }
+                        changeCommit = result;
+                        // Find the file by path in the current commit
+                        walkPath(changeCommit.tree, blobName, blobHash, repo).then(onCurrentBlob, d.reject);
+                    }
+
+                    function onCurrentBlob(result) {
+                        currentBlob = result;
+                        // Start our search loop looking for a change in the next commit
+                        log.read(onCommit);
+                    }
+
+                    function onCommit(err, result) {
+                        if (err) {
+                            d.reject(err);
+                            return;
+                        }
+                        oldCommit = result;
+                        if (oldCommit === undefined) {
+                            // We've reached the beginning of history, this was created in the initial commit
+                            return d.resolve({
+                                oldBlob: undefined,
+                                currentBlob: currentBlob,
+                                changeCommit: changeCommit
+                            });
+                        }
+                        walkPath(oldCommit.tree, blobName, blobHash, repo).then(onBlob, d.reject);
+                    }
+
+                    function onBlob(result) {
+                        oldBlob = result;
+                        if ((oldBlob && oldBlob.hash) !== currentBlob.hash) {
+                            return d.resolve({
+                                oldBlob: oldBlob,
+                                currentBlob: currentBlob,
+                                changeCommit: changeCommit
+                            });
+                        }
+                        changeCommit = oldCommit;
+                        log.read(onCommit);
+                    }
+
+                    return d.promise;
                 }
             };
+
+            return factory;
         }]);
 })(window.angular);
