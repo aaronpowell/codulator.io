@@ -13,7 +13,7 @@
       jade: /\.jade$/i
     };
 
-    var isText = /(?:\.(?:markdown|md|txt|html|svg|xml|yml)|^(?:LICENSE|README|\.gitignore))$/i;
+    var isText = /(?:\.(?:markdown|md|txt|html|svg|xml|yml)|^(?:LICENSE|README|\.gitignore|\.gitattributes))$/i;
 
     var isImage = /\.(?:png|jpg|jpeg|gif)$/i;
 
@@ -46,13 +46,13 @@
                     // return undefined for not-found errors
                     if (!entry) {
                         if (folders.length) {
-                            $q.all(
-                                folders.map(function (folder) {
+                            var promises = folders.map(function (folder) {
                                     return walkPath(folder.hash, fileName, blobHash, repo);
-                                })
-                            ).then(function () {
-                                console.dir(arguments);
-                                d.resolve();
+                                });
+                            $q.all(promises).then(function (values) {
+                                d.resolve(values[0]);
+                            }, function () {
+                                d.reject();
                             });
                             return;
                         } else {
